@@ -1,0 +1,61 @@
+{
+    "algo_name": "bc",
+    "experiment": {
+        "name": "cartesian_bc_edl_one_side",
+        "validate": true,
+        "logging": {
+            "terminal_output_to_txt": true,
+            "log_tb": true
+        }
+    },
+    "train": {
+        "data": "/home/alberto/0_master/Thesis/robomimic/datasets/custom/reach_one_side/dataset_low_dim.hdf5",
+        "output_dir": "../bc_trained_models",
+        "normalize_weights_by_ds_size": false,
+        "num_data_workers": 0,
+        "hdf5_cache_mode": "all",
+        "hdf5_use_swmr": true,
+        "hdf5_load_next_obs": false,
+        "hdf5_normalize_obs": false,
+        "hdf5_filter_key": "train",
+        "hdf5_validation_filter_key": "valid",
+        "seq_length": 1,
+        "pad_seq_length": true,
+        "frame_stack": 1,
+        "pad_frame_stack": true,
+        "dataset_keys": [
+            "actions",
+            "rewards",
+            "dones"
+        ],
+        "action_keys": [
+            "actions"
+        ],
+        "action_config": {
+            "actions": {
+                "normalization": null
+            }
+        },
+        "goal_mode": null,
+        "cuda": true,
+        "batch_size": 100,
+        "num_epochs": 1200,
+        "seed": 1,
+        "max_grad_norm": null
+    },
+    "algo": {
+        "optim_params": {
+            "policy": {
+                "learning_rate": {
+                    "initial": 1e-4,
+                    "decay_factor": 0.1
+                }
+            }
+        },
+        "actor_layer_dims": [1024, 512, 256],
+        "edl": {
+            "enabled": true,
+            "regularizer_coeff": 0.1
+        }
+    }
+}

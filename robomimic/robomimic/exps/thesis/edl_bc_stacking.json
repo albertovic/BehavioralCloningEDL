@@ -1,0 +1,109 @@
+{
+    "algo_name": "bc",
+    "experiment": {
+        "name": "pick_place_bc_edl_base_v1_frame_stacking",
+        "validate": true,
+        "rollout": {
+            "enabled": false
+        },
+        "logging": {
+            "terminal_output_to_txt": true,
+            "log_tb": true
+        },
+        "save": {
+            "enabled": true,
+            "every_n_epochs": 50,
+            "epochs": [],
+            "on_best_validation": true,
+            "on_best_rollout_return": false,
+            "on_best_rollout_success_rate": false
+        }
+    },
+    "train": {
+        "data": "/media/alberto/ExtDrive/Thesis/datasets/pick_place/pick_place_vision_84_compressed.hdf5",
+        "output_dir": "/media/alberto/ExtDrive/Thesis/models",
+        "normalize_weights_by_ds_size": false,
+        "num_data_workers": 0,
+        "hdf5_cache_mode": "low_dim",
+        "hdf5_use_swmr": true,
+        "hdf5_load_next_obs": false,
+        "hdf5_normalize_obs": false,
+        "hdf5_filter_key": "train",
+        "hdf5_validation_filter_key": "valid",
+        "seq_length": 3,
+        "pad_seq_length": true,
+        "frame_stack": 1,
+        "pad_frame_stack": true,
+        "dataset_keys": [
+            "actions",
+            "rewards",
+            "dones"
+        ],
+        "action_keys": [
+            "actions"
+        ],
+        "action_config": {
+            "actions": {
+                "normalization": null
+            }
+        },
+        "goal_mode": null,
+        "cuda": true,
+        "batch_size": 32,
+        "num_epochs": 10000,
+        "seed": 1,
+        "max_grad_norm": 100.0
+    },
+    "observation": {
+        "modalities": {
+            "obs": {
+                "low_dim": [
+                    "robot0_eef_pos",
+                    "robot0_eef_quat",
+                    "robot0_gripper_qpos"
+                ],
+                "rgb": [
+                    "agentview_image",
+                    "robot0_eye_in_hand_image"
+                ]
+            }
+        },
+        "encoder": {
+            "low_dim": {
+                "core_class": null,
+                "core_kwargs": {}
+            },
+            "rgb": {
+                "core_class": "VisualCore",
+                "core_kwargs": {
+                    "feature_dimension": 256,
+                    "backbone_class": "ResNet50Conv",
+                    "backbone_kwargs": {
+                        "pretrained": true,
+                        "input_coord_conv": false
+                    },
+                    "pool_class": "SpatialSoftmax",
+                    "pool_kwargs": {
+                        "num_kp": 128
+                    }
+                }
+            }
+        }
+    },
+    "algo": {
+        "optim_params": {
+            "policy": {
+                "learning_rate": {
+                    "initial": 1e-4,
+                    "decay_factor": 0.1
+                }
+            }
+        },
+        "actor_layer_dims": [1024, 1024, 1024, 512],
+        "edl_frame_stacking": {
+            "enabled": true,
+            "regularizer_coeff": 0.1,
+            "warmup_percentage": 0.2
+        }
+    }
+}
